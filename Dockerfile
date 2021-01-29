@@ -43,7 +43,8 @@ FROM scratch as api
 #Good practice to not run deployed container as root
 COPY --from=gcvitapi /go/src/server /app/
 #add mount points for config and assets
-VOLUME ["/app/config","/app/assets"]
+# commenting out to avoid "cannot mount volume over existing file, file exists"
+#VOLUME ["/app/config","/app/assets"]
 WORKDIR /app
 #start server
 ENTRYPOINT ["/app/server","--gcvitRoot=./", "--ui=/ui"]
@@ -59,4 +60,4 @@ FROM api-ui as full
 COPY ui/cvitjs/cvit.conf /app/ui/cvitjs/cvit.conf
 COPY ui/cvitjs/data /app/ui/cvitjs/data
 COPY /config /app/config
-COPY /assets /app/assets
+ADD https://legumeinfo.org/data/public/Cicer_arietinum/CDCFrontier.div.G8RH/cicar.CDCFrontier.div.G8RH_sub10k.vcf.gz /app/assets/
