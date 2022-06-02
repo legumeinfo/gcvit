@@ -3,6 +3,6 @@ server:
   apiOnly: False
 
 G8RH:
-  location: assets/cicar.CDCFrontier.div.G8RH_sub10k.vcf.gz
-  name: cicar.CDCFrontier.div.G8RH_sub10k.vcf.gz 
+  location: assets/cicar.CDCFrontier.div.vonWettberg_Chang_2018_sub10k.vcf.gz
+  name: cicar.CDCFrontier.div.vonWettberg_Chang_2018_sub10k.vcf.gz
   format: vcf

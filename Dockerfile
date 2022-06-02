@@ -1,6 +1,6 @@
 #Multistage build
 #Build stage for cvit component
-FROM node:12.18.0-alpine3.12 as cvitui
+FROM node:14-alpine as cvitui
 WORKDIR /cvit
 #Doing package before build allows us to leverage docker caching.
 COPY ui/cvitjs/package*.json ./
@@ -12,7 +12,7 @@ COPY ui/cvitjs/rollup.config.js ui/cvitjs/.babelrc ./
 RUN npm run build
 
 #gcvit image with dependencies installed for interactive development
-FROM node:12.18.0-alpine3.12 as gcvitui-dev
+FROM node:14-alpine as gcvitui-dev
 ARG apiauth=false
 WORKDIR /gcvit
 COPY ui/gcvit/package*.json ./
@@ -29,7 +29,7 @@ RUN npm run build && \
 	if [ "$apiauth" = "true" ] ; then echo Building UI with Auth && npm run buildauth ; fi
 
 #Build stage for golang API components
-FROM golang:1.13.12-alpine3.12 as gcvitapi
+FROM golang:1.18-alpine as gcvitapi
 RUN apk add --update --no-cache git
 #add project to GOPATH/src so dep can run and make sure dependencies are right
 ADD api/ /go/src/
@@ -39,8 +39,7 @@ RUN go get
 RUN CGO_ENABLED=0 go build -o server .
 
 #Actual deployment container stage
-FROM scratch as api
-#Good practice to not run deployed container as root
+FROM busybox as api
 COPY --from=gcvitapi /go/src/server /app/
 #add mount points for config and assets
 # commenting out to avoid "cannot mount volume over existing file, file exists"
@@ -60,4 +59,12 @@ FROM api-ui as full
 COPY ui/cvitjs/cvit.conf /app/ui/cvitjs/cvit.conf
 COPY ui/cvitjs/data /app/ui/cvitjs/data
 COPY /config /app/config
-ADD https://legumeinfo.org/data/public/Cicer_arietinum/CDCFrontier.div.G8RH/cicar.CDCFrontier.div.G8RH_sub10k.vcf.gz /app/assets/
+COPY /assets /app/assets
+# precompress files so fasthttp doesn't attempt to compress them
+# (and fail due to lack of write permissions)
+RUN find /app/ui -type f -exec sh -c 'gzip < {} > {}.fasthttp.gz' \;
+
+# Run as "nobody" user (use uid for cf-for-k8s compatibility)
+USER 65534
+
+ADD --chmod=444 https://data.legumeinfo.org/Cicer/arietinum/diversity/CDCFrontier.div.vonWettberg_Chang_2018/cicar.CDCFrontier.div.vonWettberg_Chang_2018_sub10k.vcf.gz /app/assets/
