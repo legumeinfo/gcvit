@@ -299,6 +299,31 @@ legend {
     z-index: 1000;
 }
 
+.header-image {
+    float:left;
+    margin-top:1em;
+    margin-bottom:.5em;
+}
+
+.header-container{
+    float:left;
+    margin-left:.5em;
+    margin-right:1em;
+    margin-top:.5em;
+    margin-bottom:.5em;
+    font-family:ProximaNova,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+}
+
+.header-title{
+    font-size:1.5em;
+    color:black;
+}
+
+.header-caption{
+    font-size:.9em; 
+    color:black;
+}
+
 
 /*----- Modals and Contents -----*/
 

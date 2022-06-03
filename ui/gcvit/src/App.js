@@ -195,6 +195,14 @@ export default class App extends React.Component {
                         <HelpModal closeAction={()=>this.handleOpenModal()} />
                 </ReactModal>
 
+                <div className={'header-image'}>                                                                                                                                                                
+                    <a href="https://www.legumeinfo.org/"><img src="https://www.legumeinfo.org/assets/img/lis-logo-small.png" alt="LIS - Legume Information System"/></a>                                      
+                </div>                                                                                                                                                                                   
+                <div className={'header-container'}>     
+                    <div className={'header-title'}>GCViT: SNP Comparison Tool</div>                                                                                                        
+                    <div className={'header-caption'}>Cicer (chickpea)</div>                                                                                   
+                </div>  
+
                 <div
                     className={'pure-u-1-1 l-box fake-button'}
                     onClick={()=>{this.setState({hideOptions:!hideOptions})}}
