@@ -63,5 +63,9 @@ COPY /assets /app/assets
 # (and fail due to lack of write permissions)
 RUN find /app/ui -type f -exec sh -c 'gzip < {} > {}.fasthttp.gz' \;
 
+RUN cd /app/assets \
+  && wget https://data.legumeinfo.org/Phaseolus/vulgaris/diversity/G19833.gnm1.div.Moghaddam_Mamidi_2016/phavu.G19833.gnm1.div.Moghaddam_Mamidi_2016.712_geno_MDP_ADP_BASE_imputed_sub10k.vcf.gz \
+  && chmod 444 phavu.*.gz
+
 # Run as "nobody" user (use uid for cf-for-k8s compatibility)
 USER 65534
