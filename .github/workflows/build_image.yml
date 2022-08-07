@@ -5,7 +5,7 @@ name: Build and push container image
 on:
   push:
     branches:
-      - gcvit.cicer.legumeinfo.org
+      - cicer-gcvit.apps.legumeinfo.org
 
 env:
   REGISTRY: ghcr.io
